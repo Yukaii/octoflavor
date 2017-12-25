@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+  {% include head.html %}
+
+  <body>
+    {% include ga.html %}
+    {% include header.html %}
+
+    <div class="page-content">
+      <div class="wrapper">
+        {{ content }}
+      </div>
+    </div>
+
+    {% include footer.html %}
+
+    <script id="dsq-count-scr" src="//{{ site.disqus.short_name }}.disqus.com/count.js" async></script>
+
+    {% assign tips = site.hi_tips %}
+    {% include search.html posts=tips %}
+  </body>
+
+</html>

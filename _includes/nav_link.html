@@ -1,0 +1,13 @@
+{% assign my_page = include.my_page %}
+{% assign page = include.page %}
+
+{% if page.url contains my_page.url %}
+  {% assign href_class = "tabnav-tab selected" %}
+{% else %}
+  {% assign href_class = "tabnav-tab" %}
+{% endif %}
+
+<a href="{{ my_page.url | prepend: site.baseurl }}" class="{{ href_class }}">
+  {% octicon {{ my_page.octicon }} %}
+  {{ my_page.title }}
+</a>

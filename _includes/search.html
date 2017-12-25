@@ -1,0 +1,185 @@
+<script data-turbolinks-eval="false">
+/* nice guide from https://learn.cloudcannon.com/jekyll/jekyll-search-using-lunr-js/ */
+var pageLoaded = false;
+
+(function() {
+  var store = {
+    {% for post in include.posts %}
+      "{{ post.url | slugify }}": {
+        "title": "{{ post.title | xml_escape }}",
+        "url": "{{ post.url | xml_escape }}",
+        "author": "{{ post.author | xml_escape }}",
+        "category": "{{ post.category | xml_escape }}",
+        "content": {{ post.content | strip_html | strip_newlines | jsonify }},
+        "url": "{{ post.url | xml_escape }}",
+        "date": "{{ post.date | date: "%b %-d, %Y" }}"
+      }
+      {% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  };
+
+  function getQueryVariable(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split('&');
+
+    for (var i = 0; i < vars.length; i++) {
+      var pair = vars[i].split('=');
+
+      if (pair[0] === variable) {
+        return decodeURIComponent(pair[1].replace(/\+/g, '%20'));
+      }
+    }
+  }
+
+  function makePostItemNode(item) {
+    var string = '{% include post-item.html url='' title='' %}'
+
+    // convert html string to dom node
+    var div = document.createElement('div')
+    div.innerHTML = string
+    var element = div.firstChild
+
+    // build post data
+    var anchors = element.querySelectorAll('a')
+    for (var j = 0; j < anchors.length; j++) {
+      // prepend link
+      anchors[j].setAttribute('href', item.url + anchors[j].getAttribute('href'))
+    }
+
+    // add title
+    var title = element.querySelector('h4 a')
+    title.innerHTML = item.title
+
+    // add date
+    var postMeta = element.querySelector('.post-meta')
+    postMeta.innerHTML = item.date
+
+    return element
+  }
+
+  function displaySearchResults(results, store) {
+    var elements = []
+
+    for (var i = 0; i < results.length; i++) {
+      var element = makePostItemNode(store[results[i].ref])
+      elements.push(element)
+    }
+
+    // build search results
+    var searchList = document.createElement('nav')
+    searchList.className = 'menu centered search-list'
+    for (var i = 0; i < elements.length; i++) {
+      searchList.appendChild(elements[i])
+    }
+
+    // clean up old searchlist
+    var oldSearchList = document.querySelector('.menu.centered.search-list')
+    if (oldSearchList) {
+      oldSearchList.remove()
+    }
+
+    // hide old list
+    var oldList = document.querySelector('.menu.centered')
+    oldList.style.display = 'none'
+
+    // prepend old list
+    var homeContainer = document.querySelector('.home')
+    homeContainer.insertBefore(searchList, oldList)
+  }
+
+  function pushHistory(url) {
+    if (history.pushState) {
+      window.history.pushState({ path: url }, '', url);
+    }
+  }
+
+  function replaceHistroy(url) {
+    if (history.replaceState) {
+      window.history.replaceState({ path: url }, '', url);
+    }
+  }
+
+  function currentPath() {
+    return window.location.protocol + "//" + window.location.host + window.location.pathname
+  }
+
+  function search () {
+    var searchTerm
+    var inputField = document.querySelector('#post-search-form #post-search')
+
+    if (pageLoaded) {
+      if (inputField && inputField.value) {
+        searchTerm = inputField.value
+        pushHistory(currentPath() + '?query=' + searchTerm)
+      } else {
+        /* cleanup history */
+        pushHistory(currentPath())
+      }
+    } else {
+      // page not loaded yet
+      searchTerm = getQueryVariable('query');
+      pageLoaded = true
+    }
+
+    if (searchTerm && inputField) {
+      inputField.setAttribute("value", searchTerm);
+
+      // Initalize lunr with the fields it will be searching on. I've given title
+      // a boost of 10 to indicate matches on this field are more important.
+      var idx = lunr(function () {
+        this.field('id');
+        this.field('title', { boost: 10 });
+        this.field('author');
+        this.field('category');
+        this.field('content');
+        this.field('url');
+        this.field('date');
+
+        for (var key in store) { // Add the data to lunr
+          this.add({
+            'id': key,
+            'title': store[key].title,
+            'author': store[key].author,
+            'category': store[key].category,
+            'content': store[key].content,
+            'url': store[key].url,
+            'date': store[key].date,
+          });
+        }
+      });
+
+      var results = idx.search(searchTerm); // Get lunr to perform a search
+      displaySearchResults(results, store); // We'll write this in the next section
+    } else {
+      // clean up
+      var searchList = document.querySelector('.menu.centered.search-list')
+      if (searchList) {
+        searchList.remove()
+      }
+
+      // unhide old list
+      var oldList = document.querySelector('.menu.centered')
+      if (oldList) {
+        oldList.style.display = 'inherit'
+      }
+
+      pushHistory(currentPath())
+    }
+  }
+
+  // bind form action
+  var searchForm = document.getElementById('post-search-form')
+  if (searchForm) {
+    searchForm.addEventListener('submit', function (e) {
+      e.preventDefault()
+
+      search()
+    })
+  }
+
+  // Initial search action
+  if (!pageLoaded) {
+    search()
+  }
+})()
+</script>

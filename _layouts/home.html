@@ -1,0 +1,28 @@
+---
+layout: default
+---
+<div class="home">
+  {% include search_field.html %}
+
+  <nav class="menu centered">
+    {% for post in site.posts %}
+      {% if forloop.index > 7 %}
+      {% break %}
+      {% endif %}
+      <div class="menu-item">
+        <h4>
+          <a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+          <a href="{{ post.url | prepend: site.baseurl | append: '#disqus_thread' }}" style="display: inline-block; float: right;" class="comments-link">
+            {% octicon comment %}
+            <span class="disqus-comment-count" data-disqus-identifier="{{post.url | prepend: site.url}}"></span>
+          </a>
+        </h4>
+        <div class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</div>
+      </div>
+    {% endfor %}
+  </nav>
+
+  <a class="btn" href="{{ site.default_post_collection | append: '/' | prepend: site.baseurl }}" role="button">More</a>
+  <a href="{{ '/feed.xml' | prepend: site.baseurl }}" class="btn btn-primary" role="button">subscribe via RSS</a>
+
+</div>

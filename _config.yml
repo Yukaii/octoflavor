@@ -1,0 +1,29 @@
+title: Octoflavor Theme
+email: octoflavor@yukaii.tw
+description: >
+  Here's the awesome theme!
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site
+# twitter_username: jekyllrb
+github_username:
+full_name:
+google_analytics:
+default_post_collection: blog
+theme: octoflavor
+
+disqus:
+  enabled: true
+  short_name:
+
+permalink: /blog/:year/:month/:day/:title/
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+
+plugins:
+  - jekyll-assets
+  - jekyll-redirect-from
+  - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-octicons

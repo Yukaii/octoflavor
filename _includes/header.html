@@ -1,0 +1,34 @@
+<header class="site-header">
+
+  <div class="title-wrapper">
+    <h1>
+      <a class="site-title" href="{{ site.baseurl }}/">{{ site.title }}</a>
+    </h1>
+  </div>
+
+  <div class="nav-wrapper">
+    <div class="tabnav">
+      <nav class="tabnav-tabs">
+        {% if page.url == "/" %}
+          <a href="/" class="tabnav-tab selected">
+            {% octicon octoface %}
+            {{ site.title }}
+          </a>
+        {% else %}
+          <a href="/" class="tabnav-tab">
+            {% octicon octoface %}
+            {{ site.title }}
+          </a>
+        {% endif %}
+
+        {% assign sorted_pages = site.pages | sort: "order" %}
+        {% for my_page in sorted_pages %}
+          {% if my_page.title %}
+            {% include nav_link.html my_page=my_page page=page %}
+          {% endif %}
+        {% endfor %}
+      </nav>
+    </div>
+  </div>
+
+</header>

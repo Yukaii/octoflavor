@@ -1,0 +1,226 @@
+@charset "utf-8";
+
+// Our variables
+$base-font-family: Palatino, 'Palatino Linotype', 'Palatino LT STD', 'Book Antiqua', Georgia, serif;
+$base-font-size:   16px;
+$base-font-weight: 400;
+$small-font-size:  $base-font-size * 0.875;
+$base-line-height: 1.5;
+
+$spacing-unit:     20px;
+
+$text-color:       #333333;
+$background-color: #fff;
+$brand-color:      #4078c0;
+
+$grey-color:       #828282;
+$grey-color-light: lighten($grey-color, 40%);
+$grey-color-dark:  darken($grey-color, 25%);
+$grey-text-color:  #979797;
+
+// Width of the content area
+$content-width:    800px;
+
+$on-palm:          600px;
+$on-laptop:        800px;
+
+
+
+// Use media queries like this:
+// @include media-query($on-palm) {
+//     .wrapper {
+//         padding-right: $spacing-unit / 2;
+//         padding-left: $spacing-unit / 2;
+//     }
+// }
+@mixin media-query($device) {
+    @media screen and (max-width: $device) {
+        @content;
+    }
+}
+
+@import
+  "octoflavor/base",
+  "octoflavor/layout",
+  "octoflavor/syntax-highlighting"
+;
+
+.tabnav-tabs {
+  @include media-query($on-palm) {
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+    overflow-y: hidden;
+    white-space: nowrap;
+  }
+}
+
+.title-wrapper {
+  @include media-query($on-palm) {
+    padding: .5em 0 .3em;
+    background-color: black;
+    color: white;
+
+    & > h1 {
+      font-size: 28px;
+    }
+
+    a {
+      color: white;
+
+      &:visited {
+        color: white;
+      }
+    }
+  }
+}
+
+// style overwrites
+.tabnav-tab {
+  border-width: 3px 1px 1px;
+
+  svg {
+    fill: #bbb;
+  }
+
+  &.selected {
+    border-color: #d26911 #ddd transparent;
+
+    svg {
+      fill: #111;
+    }
+  }
+}
+
+.nav-wrapper {
+  border-bottom: 1px solid #ddd;
+  font-family:  -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+  @include media-query($on-palm) {
+    background-color: black;
+    border-bottom: 0;
+    padding: 0 7px;
+  }
+
+  .tabnav {
+    width: 700px;
+    margin: 0 auto;
+    border-bottom: transparent;
+
+    .tabnav-tabs {
+      padding: 0 .5em;
+    }
+
+    @include media-query($on-palm) {
+      width: auto;
+
+      svg {
+        display: none;
+        fill: white;
+      }
+
+      .tabnav-tabs {
+        padding: 0;
+      }
+
+      .tabnav-tab {
+        border-width: 0px;
+        color: rgba(255,255,255,0.75);
+        font-size: 15px;
+        padding: 5px 7px 9px;
+      }
+
+      .tabnav-tab.selected {
+        font-weight: 600;
+        background-color: transparent;
+        color: #fff;
+      }
+
+    }
+  }
+
+}
+
+.exploregrid-item {
+  float: left;
+  width: 45%;
+  height: 185px;
+  max-width: 100%;
+  padding: 20px;
+  margin: 15px;
+  font-size: 14px;
+  color: #555;
+  border: 1px solid rgba(0,0,0,0.075);
+  border-bottom-color: rgba(0,0,0,0.125);
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05),0 5px 10px rgba(0,0,0,0.05);
+  -webkit-transition: border-color 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+  transition: border-color 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+
+  @include media-query($on-palm) {
+    max-width: 305px;
+    width: 100%;
+  }
+
+  &:hover {
+    text-decoration: none;
+    border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.15);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05),0 8px 15px rgba(0,0,0,0.1);
+  }
+
+  h3 {
+    &:hover {
+      color: #4078c0;
+    }
+  }
+}
+
+a.comments-link {
+  color: #dadada;
+  text-decoration: none;
+
+  .disqus-comment-count {
+    font-size: small;
+  }
+
+  svg {
+    fill: #dadada;
+  }
+
+}
+
+.menu-item:hover {
+  a.comments-link {
+    color: #767676;
+
+    svg {
+      fill: #767676;
+    }
+  }
+}
+
+.post-title {
+  border-width: 0;
+  font-size: 2em;
+  font-weight: 600;
+}
+
+.post-meta svg {
+  fill: #828282;
+}
+
+.form-container {
+  padding: 0 0 10px;
+
+  form {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: start;-ms-flex-pack: start;justify-content: flex-start;
+
+    .subnav-search-input {
+      max-width: 320px;
+      width: auto;
+      flex: 1;
+    }
+  }
+}
