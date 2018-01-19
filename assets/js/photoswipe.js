@@ -63,6 +63,22 @@ var parseThumbnailElements = function (elements) {
   return items;
 }
 
+var getThumbBoundsFn = function(index) {
+
+  // find thumbnail element
+  var thumbnail = document.querySelectorAll('.post.markdown-body .post-content img')[index];
+
+  // get window scroll Y
+  var pageYScroll = window.pageYOffset || document.documentElement.scrollTop;
+  // optionally get horizontal scroll
+
+  // get position of element relative to viewport
+  var rect = thumbnail.getBoundingClientRect();
+
+  // w = width
+  return {x:rect.left, y:rect.top + pageYScroll, w:rect.width};
+}
+
 var initPhotoSwipeFromDOM = function(gallerySelector) {
   // loop through all gallery elements and bind events
   var galleryElements = document.querySelectorAll( gallerySelector );
@@ -80,7 +96,10 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
       })
 
       var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, {
-        index: index
+        index: index,
+        getThumbBoundsFn: getThumbBoundsFn,
+        tapToToggleControls: true,
+        showHideOpacity: true
       });
       gallery.init();
     }
