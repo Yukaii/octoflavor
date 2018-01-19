@@ -22,7 +22,6 @@ exclude:
   - Gemfile.lock
 
 plugins:
-  - jekyll-assets
   - jekyll-redirect-from
   - jekyll-sitemap
   - jekyll-feed
