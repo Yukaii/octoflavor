@@ -24,7 +24,6 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency "jekyll-redirect-from", "~> 0.13"
   spec.add_runtime_dependency "jekyll-sitemap", "~> 1.1"
-  spec.add_runtime_dependency "jekyll-feed", "~> 0.9"
   spec.add_runtime_dependency "jekyll-compose", "~> 0.6"
   spec.add_runtime_dependency "jekyll-octicons", "~> 4.0"
 
